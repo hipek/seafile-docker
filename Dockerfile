@@ -1,14 +1,11 @@
 FROM python:3.8.20-slim
 
-ENV SEAFILE_VERSION=10.0.1
+ENV SEAFILE_VERSION=11.0.13
 WORKDIR /home/seafile/seafile
 
 RUN apt update && apt install -y \
 	gcc g++ memcached libmemcached-dev pwgen sqlite3 \
-	libmariadb-dev-compat procps curl wget locales
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-RUN apt clean
+	libmariadb-dev-compat procps curl wget locales libldap2-dev
 
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -23,6 +20,9 @@ RUN wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.
 RUN tar -xzf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 RUN rm seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 RUN ln -s seafile-server-${SEAFILE_VERSION} seafile-server-latest
+
+RUN pip install -r seafile-server-latest/seahub/requirements.txt
+RUN apt clean
 
 COPY seafile-start-stop.sh /home/seafile/seafile/
 RUN chown -R seafile:seafile /home/seafile
