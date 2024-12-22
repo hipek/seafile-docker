@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Start script
-/home/seafile/seafile/seafile.sh start
+/home/seafile/seafile/seafile-start-stop.sh start
 
 # Stop script
 stop_script() {
-    /home/seafile/seafile/seafile.sh stop
+    /home/seafile/seafile/seafile-start-stop.sh stop
     exit 0
 }
 
